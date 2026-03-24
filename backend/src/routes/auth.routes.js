@@ -7,7 +7,8 @@ router.post(
   '/register',
   [
     body('name').trim().notEmpty().withMessage('Name is required'),
-    body('email').isEmail().normalizeEmail().withMessage('Valid email required'),
+    body('email').isEmail().normalizeEmail().withMessage('Valid email required')
+      .custom((val) => { if (!val.endsWith('@athivatech.com')) throw new Error('Only @athivatech.com email addresses are allowed') ; return true }),
     body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
   ],
   validate,

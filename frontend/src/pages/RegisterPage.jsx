@@ -11,6 +11,9 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+    if (!form.email.endsWith('@athivatech.com')) {
+      return setError('Only @athivatech.com email addresses are allowed')
+    }
     setLoading(true)
     try {
       await register(form)
@@ -26,8 +29,8 @@ export default function RegisterPage() {
     <div className="min-h-[calc(100vh-3.5rem)] grid-bg flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-black gradient-text mb-2">Create account</h1>
-          <p className="text-gray-500 text-sm">Join the hackathon platform</p>
+          <h1 className="text-3xl font-black gradient-text mb-2">Create your account</h1>
+          <p className="text-gray-500 text-sm">Register to join Athiva Hackathon 2026</p>
         </div>
 
         <div className="card p-8">
@@ -57,7 +60,7 @@ export default function RegisterPage() {
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 className="input-dark"
-                placeholder="you@company.com"
+                placeholder="you@athivatech.com"
               />
             </div>
             <div>

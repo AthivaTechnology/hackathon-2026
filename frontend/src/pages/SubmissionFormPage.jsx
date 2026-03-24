@@ -84,7 +84,7 @@ export default function SubmissionFormPage() {
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
             className="input-dark"
-            placeholder="My Awesome Project"
+            placeholder="e.g. AI-powered onboarding assistant"
           />
         </div>
         <div>

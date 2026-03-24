@@ -26,7 +26,7 @@ export default function HackathonCreatePage() {
     <div className="max-w-2xl mx-auto px-4 py-10">
       <div className="mb-6">
         <h1 className="text-2xl font-black text-white">Create Hackathon</h1>
-        <p className="text-gray-500 text-sm mt-1">Launch a new hackathon for your team</p>
+        <p className="text-gray-500 text-sm mt-1">Launch a new hackathon for Athiva</p>
       </div>
 
       {error && (
