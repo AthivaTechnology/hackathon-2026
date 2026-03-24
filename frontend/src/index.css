@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #0d0d14;
+    color: white;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0d0d14;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1e1e2e;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #22d3ee44;
+  }
+
+  input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.6);
+    cursor: pointer;
+  }
+}
+
+@layer utilities {
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(34,211,238,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(34,211,238,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #8b5cf6, #22d3ee, #4ade80);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .card {
+    background: #13131f;
+    border: 1px solid #1e1e2e;
+    border-radius: 0.75rem;
+  }
+
+  .card-hover {
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card-hover:hover {
+    border-color: rgba(34,211,238,0.3);
+    box-shadow: 0 0 24px rgba(34,211,238,0.08);
+  }
+
+  .input-dark {
+    background: #0d0d14;
+    border: 1px solid #1e1e2e;
+    color: white;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .input-dark::placeholder {
+    color: #4b5563;
+  }
+  .input-dark:focus {
+    border-color: #22d3ee;
+    box-shadow: 0 0 0 2px rgba(34,211,238,0.15);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #8b5cf6, #22d3ee);
+    color: white;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.5rem;
+    transition: opacity 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary:hover {
+    opacity: 0.9;
+    box-shadow: 0 0 20px rgba(139,92,246,0.35);
+  }
+  .btn-primary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: #9ca3af;
+    font-size: 0.875rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.5rem;
+    border: 1px solid #1e1e2e;
+    transition: border-color 0.2s, color 0.2s;
+    cursor: pointer;
+  }
+  .btn-ghost:hover {
+    border-color: #374151;
+    color: white;
+  }
+}

@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  JUDGE
+  PARTICIPANT
+}
+
+enum HackathonStatus {
+  PENDING
+  ACTIVE
+  SUBMISSION_CLOSED
+  COMPLETED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         Role     @default(PARTICIPANT)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  hackathons    Hackathon[]
+  submissions   Submission[]
+  evaluations   Evaluation[]
+  comments      Comment[]
+  refreshTokens RefreshToken[]
+}
+
+model Hackathon {
+  id                 String          @id @default(cuid())
+  title              String
+  description        String          @db.Text
+  startTime          DateTime
+  submissionDeadline DateTime
+  status             HackathonStatus @default(PENDING)
+  createdById        String
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+
+  createdBy   User         @relation(fields: [createdById], references: [id])
+  submissions Submission[]
+}
+
+model Submission {
+  id          String           @id @default(cuid())
+  hackathonId String
+  userId      String
+  title       String
+  description String           @db.Text
+  projectLink String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  hackathon   Hackathon    @relation(fields: [hackathonId], references: [id], onDelete: Cascade)
+  user        User         @relation(fields: [userId], references: [id])
+  evaluations Evaluation[]
+  comments    Comment[]
+
+  @@unique([hackathonId, userId])
+}
+
+model Evaluation {
+  id             String   @id @default(cuid())
+  submissionId   String
+  judgeId        String
+  innovationScore      Int
+  impactScore          Int
+  technicalScore       Int
+  feedback       String?  @db.Text
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  judge      User       @relation(fields: [judgeId], references: [id])
+
+  @@unique([submissionId, judgeId])
+}
+
+model Comment {
+  id           String   @id @default(cuid())
+  submissionId String
+  userId       String
+  content      String   @db.Text
+  createdAt    DateTime @default(now())
+
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id])
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique @db.VarChar(512)
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
