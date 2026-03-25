@@ -5,11 +5,12 @@ import ProtectedRoute from './components/layout/ProtectedRoute'
 import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+import ForgotPasswordPage from './pages/ForgotPasswordPage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
 import HackathonDetailPage from './pages/HackathonDetailPage'
 import SubmissionFormPage from './pages/SubmissionFormPage'
 import SubmissionDetailPage from './pages/SubmissionDetailPage'
 import EvaluationFormPage from './pages/EvaluationFormPage'
-import HackathonCreatePage from './pages/admin/HackathonCreatePage'
 import UsersPage from './pages/admin/UsersPage'
 
 export default function App() {
@@ -22,6 +23,8 @@ export default function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
 
           {/* Hackathon — single */}
           <Route path="/hackathon" element={<ProtectedRoute><HackathonDetailPage /></ProtectedRoute>} />
@@ -32,7 +35,6 @@ export default function App() {
           <Route path="/submissions/:id/evaluate" element={<ProtectedRoute roles={['JUDGE']}><EvaluationFormPage /></ProtectedRoute>} />
 
           {/* Admin */}
-          <Route path="/admin/hackathon/new" element={<ProtectedRoute roles={['ADMIN']}><HackathonCreatePage /></ProtectedRoute>} />
           <Route path="/admin/users" element={<ProtectedRoute roles={['ADMIN']}><UsersPage /></ProtectedRoute>} />
 
           <Route path="*" element={<Navigate to="/" replace />} />

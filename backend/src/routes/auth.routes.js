@@ -27,5 +27,7 @@ router.post(
 
 router.post('/refresh', controller.refresh)
 router.post('/logout', controller.logout)
+router.post('/forgot-password', [body('email').isEmail().normalizeEmail()], validate, controller.forgotPassword)
+router.post('/reset-password', [body('token').notEmpty(), body('password').isLength({ min: 8 })], validate, controller.resetPassword)
 
 module.exports = router

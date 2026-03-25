@@ -29,11 +29,12 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  hackathons    Hackathon[]
-  submissions   Submission[]
-  evaluations   Evaluation[]
-  comments      Comment[]
-  refreshTokens RefreshToken[]
+  hackathons          Hackathon[]
+  submissions         Submission[]
+  evaluations         Evaluation[]
+  comments            Comment[]
+  refreshTokens       RefreshToken[]
+  passwordResetTokens PasswordResetToken[]
 }
 
 model Hackathon {
@@ -100,6 +101,16 @@ model Comment {
 model RefreshToken {
   id        String   @id @default(cuid())
   token     String   @unique @db.VarChar(512)
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
   userId    String
   expiresAt DateTime
   createdAt DateTime @default(now())

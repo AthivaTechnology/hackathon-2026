@@ -48,4 +48,22 @@ const logout = async (req, res, next) => {
   }
 }
 
-module.exports = { register, login, refresh, logout }
+const forgotPassword = async (req, res, next) => {
+  try {
+    await authService.forgotPassword(req.body.email)
+    res.json({ message: 'If that email is registered, a reset link has been generated.' })
+  } catch (err) {
+    next(err)
+  }
+}
+
+const resetPassword = async (req, res, next) => {
+  try {
+    await authService.resetPassword(req.body.token, req.body.password)
+    res.json({ message: 'Password updated successfully.' })
+  } catch (err) {
+    next(err)
+  }
+}
+
+module.exports = { register, login, refresh, logout, forgotPassword, resetPassword }

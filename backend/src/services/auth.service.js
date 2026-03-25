@@ -1,7 +1,10 @@
+const crypto = require('crypto')
 const prisma = require('../config/prisma')
 const { hashPassword, comparePassword } = require('../utils/password')
 const { signAccessToken, signRefreshToken, verifyRefreshToken } = require('../utils/jwt')
 const AppError = require('../utils/AppError')
+const env = require('../config/env')
+const { sendPasswordReset } = require('../utils/email')
 
 const REFRESH_TOKEN_TTL_DAYS = 7
 
@@ -79,4 +82,34 @@ const logout = async (token) => {
   await prisma.refreshToken.deleteMany({ where: { token } })
 }
 
-module.exports = { register, login, refresh, logout }
+const forgotPassword = async (email) => {
+  const user = await prisma.user.findUnique({ where: { email } })
+  // Always respond the same way to avoid email enumeration
+  if (!user) return
+
+  // Invalidate any existing tokens for this user
+  await prisma.passwordResetToken.deleteMany({ where: { userId: user.id } })
+
+  const token = crypto.randomBytes(32).toString('hex')
+  const expiresAt = new Date(Date.now() + 30 * 60 * 1000) // 30 minutes
+
+  await prisma.passwordResetToken.create({
+    data: { token, userId: user.id, expiresAt },
+  })
+
+  const resetUrl = `${env.FRONTEND_URL}/reset-password?token=${token}`
+  await sendPasswordReset(user.email, resetUrl)
+}
+
+const resetPassword = async (token, newPassword) => {
+  const record = await prisma.passwordResetToken.findUnique({ where: { token } })
+  if (!record || record.expiresAt < new Date()) {
+    throw new AppError('Reset link is invalid or has expired', 400)
+  }
+
+  const passwordHash = await hashPassword(newPassword)
+  await prisma.user.update({ where: { id: record.userId }, data: { passwordHash } })
+  await prisma.passwordResetToken.delete({ where: { token } })
+}
+
+module.exports = { register, login, refresh, logout, forgotPassword, resetPassword }

@@ -31,14 +31,12 @@ export default function SubmissionDetailPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
-      {/* Breadcrumb */}
-      <nav className="text-xs font-mono text-gray-600 mb-6 flex items-center gap-1.5">
-        <Link to="/hackathon" className="hover:text-gray-400 truncate max-w-xs">
-          {submission.hackathon?.title}
-        </Link>
-        <span>/</span>
-        <span className="text-gray-400 truncate max-w-xs">{submission.title}</span>
-      </nav>
+      <Link to="/hackathon" className="inline-flex items-center gap-1.5 text-xs font-mono text-gray-500 hover:text-white transition-colors mb-6">
+        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        Back
+      </Link>
 
       {/* Submission */}
       <div className="card p-7 mb-5 relative overflow-hidden">

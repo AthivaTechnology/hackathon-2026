@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getFeatured } from '../api/hackathons'
 import useAuthStore from '../store/authStore'
+import { HACKATHON } from '../constants/hackathon'
 
 const STATUS_CONFIG = {
   PENDING: { label: 'Upcoming', color: 'text-hack-amber border-hack-amber/30 bg-hack-amber/10' },
@@ -41,11 +42,6 @@ export default function LandingPage() {
           style={{ background: 'radial-gradient(circle, #22d3ee, transparent)' }} />
 
         <div className="relative max-w-5xl mx-auto px-4 pt-24 pb-20 text-center">
-          <div className="inline-flex items-center gap-2 text-xs font-mono text-hack-cyan border border-hack-cyan/20 bg-hack-cyan/5 rounded-full px-3 py-1 mb-8">
-            <span className="w-1.5 h-1.5 rounded-full bg-hack-cyan animate-pulse inline-block" />
-            Athiva Internal Hackathon 2026
-          </div>
-
           <h1 className="text-5xl sm:text-7xl font-black tracking-tight mb-6 leading-none">
             <span className="gradient-text">Build.</span>{' '}
             <span className="gradient-text">Ship.</span>{' '}
@@ -53,7 +49,7 @@ export default function LandingPage() {
           </h1>
 
           <p className="text-lg text-gray-400 max-w-xl mx-auto leading-relaxed">
-            48 hours. Your best idea. Athiva's first internal hackathon — sign in with your company account to participate.
+            Two days. One idea. Build an AI agent that thinks, acts, and wins. Athiva's first internal hackathon — April 3 & 4, 2026.
           </p>
         </div>
       </section>
@@ -75,18 +71,18 @@ export default function LandingPage() {
                   {status?.label}
                 </span>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-2">{hackathon.title}</h3>
+              <h3 className="text-2xl font-bold text-white mb-2">{HACKATHON.title}</h3>
               <p className="text-gray-400 text-sm leading-relaxed max-w-lg mb-6">
-                {hackathon.description}
+                {HACKATHON.tagline}
               </p>
               <div className="flex flex-wrap gap-8 text-sm">
                 <div>
                   <p className="text-xs text-gray-500 mb-0.5 uppercase tracking-wider">Starts</p>
-                  <p className="text-white font-mono">{new Date(hackathon.startTime).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                  <p className="text-white font-mono">{HACKATHON.startDate}</p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 mb-0.5 uppercase tracking-wider">Submission Deadline</p>
-                  <p className="text-white font-mono">{new Date(hackathon.submissionDeadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                  <p className="text-white font-mono">{HACKATHON.deadline}</p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 mb-0.5 uppercase tracking-wider">Ideas Submitted</p>
@@ -96,12 +92,26 @@ export default function LandingPage() {
             </div>
           </div>
         ) : (
-          <div className="card p-10 text-center">
-            <div className="text-4xl mb-3">📅</div>
-            <p className="text-gray-400">Event details coming soon.</p>
-            <p className="text-gray-600 text-sm mt-1">Check back closer to the date.</p>
+          <div className="card p-8">
+            <h3 className="text-2xl font-bold text-white mb-2">{HACKATHON.title}</h3>
+            <p className="text-gray-400 text-sm leading-relaxed mb-4">{HACKATHON.tagline}</p>
+            <p className="text-xs text-gray-600 font-mono">Event details loading…</p>
           </div>
         )}
+      </section>
+
+      {/* Prizes */}
+      <section className="max-w-5xl mx-auto px-4 pb-8">
+        <h2 className="text-xs font-mono text-gray-500 uppercase tracking-widest mb-6">Prizes</h2>
+        <div className="grid grid-cols-3 gap-4">
+          {HACKATHON.prizes.map((p) => (
+            <div key={p.place} className="card p-6 text-center card-hover">
+              <div className="text-4xl mb-3">{p.icon}</div>
+              <p className="text-2xl font-black gradient-text mb-1">{p.amount}</p>
+              <p className="text-xs text-gray-500 font-mono uppercase tracking-wider">{p.place} Place</p>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* How it works */}

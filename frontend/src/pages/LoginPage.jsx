@@ -1,14 +1,16 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { login } from '../api/auth'
 import useAuthStore from '../store/authStore'
 
 export default function LoginPage() {
   const navigate = useNavigate()
+  const location = useLocation()
   const setAuth = useAuthStore((s) => s.setAuth)
   const [form, setForm] = useState({ email: '', password: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const successMessage = location.state?.message
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -34,6 +36,11 @@ export default function LoginPage() {
         </div>
 
         <div className="card p-8">
+          {successMessage && (
+            <div className="mb-5 px-4 py-3 rounded-lg bg-hack-green/10 text-hack-green text-sm border border-hack-green/20">
+              {successMessage}
+            </div>
+          )}
           {error && (
             <div className="mb-5 px-4 py-3 rounded-lg bg-red-500/10 text-red-400 text-sm border border-red-500/20">
               {error}
@@ -62,6 +69,11 @@ export default function LoginPage() {
                 className="input-dark"
                 placeholder="••••••••"
               />
+              <div className="text-right mt-1.5">
+                <Link to="/forgot-password" className="text-xs text-gray-500 hover:text-hack-cyan transition-colors">
+                  Forgot password?
+                </Link>
+              </div>
             </div>
             <button type="submit" disabled={loading} className="btn-primary w-full py-2.5 mt-2">
               {loading ? 'Signing in…' : 'Sign in'}
