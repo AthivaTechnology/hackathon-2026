@@ -37,6 +37,7 @@ router.post(
     body('title').trim().notEmpty().withMessage('Title is required'),
     body('description').trim().notEmpty().withMessage('Description is required'),
     body('projectLink').optional({ checkFalsy: true }).isURL().withMessage('Must be a valid URL'),
+    body('demoLink').optional({ checkFalsy: true }).isURL().withMessage('Must be a valid URL'),
   ],
   validate,
   submissionController.createSubmission

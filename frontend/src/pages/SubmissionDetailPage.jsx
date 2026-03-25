@@ -69,12 +69,20 @@ export default function SubmissionDetailPage() {
 
           <p className="text-gray-300 whitespace-pre-wrap leading-relaxed mb-5">{submission.description}</p>
 
-          {submission.projectLink && (
-            <a href={submission.projectLink} target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm text-hack-cyan hover:underline font-mono">
-              View Project →
-            </a>
-          )}
+          <div className="flex flex-wrap gap-4">
+            {submission.projectLink && (
+              <a href={submission.projectLink} target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm text-hack-cyan hover:underline font-mono">
+                View Project →
+              </a>
+            )}
+            {submission.demoLink && (
+              <a href={submission.demoLink} target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm text-hack-violet hover:underline font-mono">
+                Watch Demo →
+              </a>
+            )}
+          </div>
         </div>
       </div>
 

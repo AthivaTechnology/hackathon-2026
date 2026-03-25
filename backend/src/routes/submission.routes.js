@@ -13,6 +13,7 @@ router.patch(
   [
     body('title').optional().trim().notEmpty(),
     body('description').optional().trim().notEmpty(),
+    body('demoLink').optional({ checkFalsy: true }).isURL().withMessage('Must be a valid URL'),
   ],
   validate,
   controller.updateSubmission

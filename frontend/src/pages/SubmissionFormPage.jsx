@@ -7,7 +7,7 @@ import useAuthStore from '../store/authStore'
 export default function SubmissionFormPage() {
   const { user } = useAuthStore()
   const navigate = useNavigate()
-  const [form, setForm] = useState({ title: '', description: '', projectLink: '' })
+  const [form, setForm] = useState({ title: '', description: '', projectLink: '', demoLink: '' })
   const [existingId, setExistingId] = useState(null)
   const [hackathon, setHackathon] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -23,7 +23,7 @@ export default function SubmissionFormPage() {
         const mine = sRes.data.submissions.find((s) => s.userId === user?.id)
         if (mine) {
           setExistingId(mine.id)
-          setForm({ title: mine.title, description: mine.description, projectLink: mine.projectLink || '' })
+          setForm({ title: mine.title, description: mine.description, projectLink: mine.projectLink || '', demoLink: mine.demoLink || '' })
         }
       } catch {
         setError('Failed to load')
@@ -110,6 +110,18 @@ export default function SubmissionFormPage() {
             onChange={(e) => setForm({ ...form, projectLink: e.target.value })}
             className="input-dark"
             placeholder="https://github.com/you/project"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">
+            Loom Demo <span className="text-gray-600 font-normal normal-case">(optional — add before deadline)</span>
+          </label>
+          <input
+            type="url"
+            value={form.demoLink}
+            onChange={(e) => setForm({ ...form, demoLink: e.target.value })}
+            className="input-dark"
+            placeholder="https://www.loom.com/share/..."
           />
         </div>
 

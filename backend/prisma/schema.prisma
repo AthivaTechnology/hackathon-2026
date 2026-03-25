@@ -59,6 +59,7 @@ model Submission {
   title       String
   description String           @db.Text
   projectLink String?
+  demoLink    String? @db.VarChar(512)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
