@@ -13,8 +13,9 @@ const STATUS_CONFIG = {
 
 const steps = [
   { n: '01', title: 'Register', desc: 'Create your account using your company email and join as a participant.' },
-  { n: '02', title: 'Post Your Idea', desc: 'Submit your project idea. Describe the problem you want to solve and how you plan to tackle it.' },
-  { n: '03', title: 'Get Evaluated', desc: 'A panel of internal judges scores every submission on innovation, impact, and technical depth.' },
+  { n: '02', title: 'Post Your Idea', desc: 'Submit your project idea early. Describe the problem you want to solve and how you plan to tackle it.' },
+  { n: '03', title: 'Build & Submit', desc: 'Develop your agent during April 3–4. Update your submission with a project link and demo before the 5 PM deadline.' },
+  { n: '04', title: 'Get Evaluated', desc: 'A panel of internal judges scores every submission on innovation, impact, and technical depth.' },
 ]
 
 export default function LandingPage() {
@@ -119,7 +120,7 @@ export default function LandingPage() {
         <h2 className="text-xs font-mono text-gray-500 uppercase tracking-widest mb-8">
           How to participate
         </h2>
-        <div className="grid sm:grid-cols-3 gap-4">
+        <div className="grid sm:grid-cols-4 gap-4">
           {steps.map((s) => (
             <div key={s.n} className="card p-6 card-hover">
               <div className="font-mono text-4xl font-black gradient-text mb-4">{s.n}</div>
