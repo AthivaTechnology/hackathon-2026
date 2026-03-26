@@ -17,7 +17,7 @@ env:
   FRONTEND_REPOSITORY: hackathon-frontend
 
 jobs:
-  build:
+  build: 
     name: "🐳 Build & Push to ECR"
     runs-on: ubuntu-latest
     outputs:
