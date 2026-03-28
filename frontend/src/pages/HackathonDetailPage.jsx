@@ -111,6 +111,51 @@ export default function HackathonDetailPage() {
               </div>
             </div>
           </div>
+
+          {user?.role === 'PARTICIPANT' && (
+            hackathon.status === 'ACTIVE' || hackathon.status === 'PENDING'
+          ) && (
+            <div className="mt-6 pt-6 border-t border-hack-border flex items-center justify-between gap-4">
+              {!mySubmission ? (
+                <>
+                  <div>
+                    <p className="text-sm font-semibold text-white">Ready to compete?</p>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      {hackathon.status === 'PENDING' ? 'Submissions open when the hackathon starts.' : 'Share your idea before the deadline.'}
+                    </p>
+                  </div>
+                  {hackathon.status === 'ACTIVE' && (
+                    <Link to="/hackathon/submit" className="btn-primary px-6 py-2.5 flex items-center gap-2 shrink-0">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                      </svg>
+                      Submit Your Idea
+                    </Link>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center gap-2.5">
+                    <span className="flex items-center justify-center w-7 h-7 rounded-full bg-hack-green/15 border border-hack-green/30">
+                      <svg className="w-3.5 h-3.5 text-hack-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </span>
+                    <div>
+                      <p className="text-sm font-semibold text-white">You're in!</p>
+                      <p className="text-xs text-gray-500 mt-0.5">"{mySubmission.title}" is submitted.</p>
+                    </div>
+                  </div>
+                  <Link to="/hackathon/submit" className="btn-ghost px-5 py-2 flex items-center gap-2 shrink-0">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
+                    </svg>
+                    Edit Submission
+                  </Link>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -160,27 +205,14 @@ export default function HackathonDetailPage() {
         </div>
       </div>
 
-      {/* Action bar */}
-      <div className="flex flex-wrap gap-3">
-        {user?.role === 'PARTICIPANT' &&
-          hackathon.status !== 'SUBMISSION_CLOSED' && hackathon.status !== 'COMPLETED' &&
-          !mySubmission && (
-            <Link to="/hackathon/submit" className="btn-primary px-5 py-2">
-              Post Your Idea
-            </Link>
-          )}
-        {user?.role === 'PARTICIPANT' && mySubmission &&
-          hackathon.status !== 'SUBMISSION_CLOSED' && hackathon.status !== 'COMPLETED' && (
-            <Link to="/hackathon/submit" className="btn-ghost px-5 py-2">
-              Edit My Submission
-            </Link>
-          )}
-        {user?.role === 'ADMIN' && hackathon.status === 'SUBMISSION_CLOSED' && (
+      {/* Admin action */}
+      {user?.role === 'ADMIN' && hackathon.status === 'SUBMISSION_CLOSED' && (
+        <div className="flex">
           <button onClick={handleAnnounce} disabled={announcing} className="btn-primary px-5 py-2">
             {announcing ? 'Announcing…' : '🏆 Announce Results'}
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Leaderboard */}
       {hackathon.status === 'COMPLETED' && leaderboard.length > 0 && (
