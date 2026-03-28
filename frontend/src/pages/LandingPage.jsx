@@ -76,19 +76,30 @@ export default function LandingPage() {
               <p className="text-gray-400 text-sm leading-relaxed max-w-lg mb-6">
                 {HACKATHON.tagline}
               </p>
-              <div className="flex flex-wrap gap-8 text-sm">
-                <div>
-                  <p className="text-xs text-gray-500 mb-0.5 uppercase tracking-wider">Starts</p>
-                  <p className="text-white font-mono">{HACKATHON.startDate}</p>
+              <div className="flex flex-wrap items-end justify-between gap-6">
+                <div className="flex flex-wrap gap-8 text-sm">
+                  <div>
+                    <p className="text-xs text-gray-500 mb-0.5 uppercase tracking-wider">Starts</p>
+                    <p className="text-white font-mono">{HACKATHON.startDate}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 mb-0.5 uppercase tracking-wider">Submission Deadline</p>
+                    <p className="text-white font-mono">{HACKATHON.deadline}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 mb-0.5 uppercase tracking-wider">Ideas Submitted</p>
+                    <p className="text-white font-mono">{hackathon._count?.submissions ?? 0}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs text-gray-500 mb-0.5 uppercase tracking-wider">Submission Deadline</p>
-                  <p className="text-white font-mono">{HACKATHON.deadline}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 mb-0.5 uppercase tracking-wider">Ideas Submitted</p>
-                  <p className="text-white font-mono">{hackathon._count?.submissions ?? 0}</p>
-                </div>
+                <a
+                  href="/login"
+                  className="btn-primary px-6 py-2.5 flex items-center gap-2 shrink-0"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  Participate
+                </a>
               </div>
             </div>
           </div>
