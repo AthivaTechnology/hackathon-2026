@@ -13,11 +13,19 @@ const register = async ({ name, email, password }) => {
   if (existing) throw new AppError('Email already in use', 409)
 
   const passwordHash = await hashPassword(password)
-  const user = await prisma.user.create({
-    data: { name, email, passwordHash },
-    select: { id: true, name: true, email: true, role: true, createdAt: true },
-  })
-  return user
+  try {
+    const user = await prisma.user.create({
+      data: { name, email, passwordHash },
+      select: { id: true, name: true, email: true, role: true, createdAt: true },
+    })
+    return user
+  } catch (err) {
+    // Check for Prisma unique constraint violation (P2002)
+    if (err.code === 'P2002' && err.meta?.target?.includes('email')) {
+      throw new AppError('Email already in use', 409)
+    }
+    throw err
+  }
 }
 
 const login = async ({ email, password }) => {
