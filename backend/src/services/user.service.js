@@ -1,6 +1,5 @@
 const prisma = require('../config/prisma')
 const AppError = require('../utils/AppError')
-const { hashPassword } = require('../utils/password')
 
 const listUsers = async () => {
   return prisma.user.findMany({
@@ -36,13 +35,4 @@ const deleteUser = async (id, requestingUserId) => {
   await prisma.user.delete({ where: { id } })
 }
 
-const resetPassword = async (id, newPassword) => {
-  const user = await prisma.user.findUnique({ where: { id } })
-  if (!user) throw new AppError('User not found', 404)
-
-  const passwordHash = await hashPassword(newPassword)
-  await prisma.user.update({ where: { id }, data: { passwordHash } })
-  await prisma.refreshToken.deleteMany({ where: { userId: id } })
-}
-
-module.exports = { listUsers, updateUser, deleteUser, resetPassword }
+module.exports = { listUsers, updateUser, deleteUser }

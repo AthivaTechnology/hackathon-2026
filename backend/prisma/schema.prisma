@@ -21,20 +21,18 @@ enum HackathonStatus {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  name         String
-  passwordHash String
-  role         Role     @default(PARTICIPANT)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      Role     @default(PARTICIPANT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  hackathons          Hackathon[]
-  submissions         Submission[]
-  evaluations         Evaluation[]
-  comments            Comment[]
-  refreshTokens       RefreshToken[]
-  passwordResetTokens PasswordResetToken[]
+  hackathons    Hackathon[]
+  submissions   Submission[]
+  evaluations   Evaluation[]
+  comments      Comment[]
+  refreshTokens RefreshToken[]
 }
 
 model Hackathon {
@@ -109,12 +107,12 @@ model RefreshToken {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model PasswordResetToken {
+model OtpToken {
   id        String   @id @default(cuid())
-  token     String   @unique
-  userId    String
+  email     String
+  code      String
   expiresAt DateTime
   createdAt DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([email])
 }

@@ -8,22 +8,22 @@ const transporter = nodemailer.createTransport({
   auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
 })
 
-const sendPasswordReset = async (toEmail, resetUrl) => {
+const sendOtpEmail = async (toEmail, code) => {
   await transporter.sendMail({
     from: `"Athiva Hackathon'26" <${env.SMTP_USER}>`,
     to: toEmail,
-    subject: 'Reset your password — Athiva Hackathon\'26',
+    subject: "Your login code — Athiva Hackathon'26",
     html: `
       <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:32px;background:#13131f;color:#fff;border-radius:12px">
-        <h2 style="margin:0 0 8px;font-size:20px">Reset your password</h2>
+        <h2 style="margin:0 0 8px;font-size:20px">Your login code</h2>
         <p style="color:#9ca3af;margin:0 0 24px;font-size:14px">
-          We received a request to reset your password for your Athiva Hackathon'26 account.
-          This link expires in <strong style="color:#fff">30 minutes</strong>.
+          Use the code below to sign in to Athiva Hackathon'26.
+          It expires in <strong style="color:#fff">10 minutes</strong>.
         </p>
-        <a href="${resetUrl}" style="display:inline-block;background:linear-gradient(135deg,#8b5cf6,#22d3ee);color:#fff;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600;font-size:14px">
-          Reset Password
-        </a>
-        <p style="color:#4b5563;font-size:12px;margin-top:24px">
+        <div style="background:#1e1e2e;border:1px solid rgba(139,92,246,0.3);border-radius:10px;padding:20px;text-align:center;margin-bottom:24px">
+          <span style="font-size:36px;font-weight:800;letter-spacing:12px;background:linear-gradient(135deg,#8b5cf6,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent">${code}</span>
+        </div>
+        <p style="color:#4b5563;font-size:12px;margin:0">
           If you didn't request this, you can safely ignore this email.
         </p>
       </div>
@@ -31,4 +31,4 @@ const sendPasswordReset = async (toEmail, resetUrl) => {
   })
 }
 
-module.exports = { sendPasswordReset }
+module.exports = { sendOtpEmail }

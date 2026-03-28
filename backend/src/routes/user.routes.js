@@ -20,11 +20,4 @@ router.patch(
 
 router.delete('/:id', controller.deleteUser)
 
-router.post(
-  '/:id/reset-password',
-  [body('newPassword').isLength({ min: 8 }).withMessage('Password must be at least 8 characters')],
-  validate,
-  controller.resetPassword
-)
-
 module.exports = router

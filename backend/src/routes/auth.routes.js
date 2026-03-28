@@ -2,32 +2,34 @@ const router = require('express').Router()
 const { body } = require('express-validator')
 const controller = require('../controllers/auth.controller')
 const validate = require('../middleware/validate')
+const { verifyToken } = require('../middleware/auth')
 
 router.post(
-  '/register',
-  [
-    body('name').trim().notEmpty().withMessage('Name is required'),
-    body('email').isEmail().normalizeEmail().withMessage('Valid email required')
-      .custom((val) => { if (!val.endsWith('@athivatech.com')) throw new Error('Only @athivatech.com email addresses are allowed') ; return true }),
-    body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
-  ],
+  '/send-otp',
+  [body('email').isEmail().normalizeEmail().withMessage('Valid email required')],
   validate,
-  controller.register
+  controller.sendOtp
 )
 
 router.post(
-  '/login',
+  '/verify-otp',
   [
-    body('email').isEmail().normalizeEmail(),
-    body('password').notEmpty(),
+    body('email').isEmail().normalizeEmail().withMessage('Valid email required'),
+    body('code').isLength({ min: 6, max: 6 }).isNumeric().withMessage('Code must be 6 digits'),
   ],
   validate,
-  controller.login
+  controller.verifyOtp
+)
+
+router.patch(
+  '/profile',
+  verifyToken,
+  [body('name').trim().notEmpty().withMessage('Name is required')],
+  validate,
+  controller.updateProfile
 )
 
 router.post('/refresh', controller.refresh)
 router.post('/logout', controller.logout)
-router.post('/forgot-password', [body('email').isEmail().normalizeEmail()], validate, controller.forgotPassword)
-router.post('/reset-password', [body('token').notEmpty(), body('password').isLength({ min: 8 })], validate, controller.resetPassword)
 
 module.exports = router

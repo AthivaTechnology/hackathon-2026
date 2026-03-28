@@ -27,13 +27,4 @@ const deleteUser = async (req, res, next) => {
   }
 }
 
-const resetPassword = async (req, res, next) => {
-  try {
-    await userService.resetPassword(req.params.id, req.body.newPassword)
-    res.json({ message: 'Password reset successfully' })
-  } catch (err) {
-    next(err)
-  }
-}
-
-module.exports = { listUsers, updateUser, deleteUser, resetPassword }
+module.exports = { listUsers, updateUser, deleteUser }
