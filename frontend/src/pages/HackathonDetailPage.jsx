@@ -120,18 +120,14 @@ export default function HackathonDetailPage() {
                 <>
                   <div>
                     <p className="text-sm font-semibold text-white">Ready to compete?</p>
-                    <p className="text-xs text-gray-500 mt-0.5">
-                      {hackathon.status === 'PENDING' ? 'Submissions open when the hackathon starts.' : 'Share your idea before the deadline.'}
-                    </p>
+                    <p className="text-xs text-gray-500 mt-0.5">Share your idea before the deadline.</p>
                   </div>
-                  {hackathon.status === 'ACTIVE' && (
-                    <Link to="/hackathon/submit" className="btn-primary px-6 py-2.5 flex items-center gap-2 shrink-0">
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                      </svg>
-                      Submit Your Idea
-                    </Link>
-                  )}
+                  <Link to="/hackathon/submit" className="btn-primary px-6 py-2.5 flex items-center gap-2 shrink-0">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Submit Your Idea
+                  </Link>
                 </>
               ) : (
                 <>
