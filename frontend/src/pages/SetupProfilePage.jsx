@@ -1,10 +1,13 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { sendOtp } from '../api/auth'
+import { updateProfile } from '../api/auth'
+import useAuthStore from '../store/authStore'
 
-export default function LoginPage() {
+export default function SetupProfilePage() {
   const navigate = useNavigate()
-  const [email, setEmail] = useState('')
+  const setUser = useAuthStore((s) => s.setUser)
+
+  const [name, setName] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -13,10 +16,11 @@ export default function LoginPage() {
     setError('')
     setLoading(true)
     try {
-      await sendOtp(email)
-      navigate('/verify-otp', { state: { email } })
+      const { data } = await updateProfile(name.trim())
+      setUser(data.user)
+      navigate('/hackathon', { replace: true })
     } catch (err) {
-      setError(err.response?.data?.error || 'Something went wrong. Try again.')
+      setError(err.response?.data?.error || 'Failed to save name. Try again.')
     } finally {
       setLoading(false)
     }
@@ -26,8 +30,8 @@ export default function LoginPage() {
     <div className="min-h-[calc(100vh-3.5rem)] grid-bg flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-black gradient-text mb-2">Sign in</h1>
-          <p className="text-gray-500 text-sm">Enter your Athiva email to receive a login code</p>
+          <h1 className="text-3xl font-black gradient-text mb-2">One last thing</h1>
+          <p className="text-gray-500 text-sm">Tell us your name to finish setting up your account</p>
         </div>
 
         <div className="card p-8">
@@ -40,20 +44,20 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wider">
-                Email
+                Your name
               </label>
               <input
-                type="email"
+                type="text"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="input-dark"
-                placeholder="you@athivatech.com"
+                placeholder="Ada Lovelace"
                 autoFocus
               />
             </div>
-            <button type="submit" disabled={loading} className="btn-primary w-full py-2.5 mt-2">
-              {loading ? 'Sending code…' : 'Send login code'}
+            <button type="submit" disabled={loading || !name.trim()} className="btn-primary w-full py-2.5 mt-2">
+              {loading ? 'Saving…' : 'Continue'}
             </button>
           </form>
         </div>

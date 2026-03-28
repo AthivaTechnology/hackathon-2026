@@ -7,20 +7,29 @@ const COOKIE_OPTIONS = {
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
 }
 
-const register = async (req, res, next) => {
+const sendOtp = async (req, res, next) => {
   try {
-    const user = await authService.register(req.body)
-    res.status(201).json({ user })
+    await authService.sendOtp(req.body.email)
+    res.json({ message: 'Check your email for the login code.' })
   } catch (err) {
     next(err)
   }
 }
 
-const login = async (req, res, next) => {
+const verifyOtp = async (req, res, next) => {
   try {
-    const { accessToken, refreshToken, user } = await authService.login(req.body)
+    const { accessToken, refreshToken, user } = await authService.verifyOtp(req.body.email, req.body.code)
     res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS)
     res.json({ accessToken, user })
+  } catch (err) {
+    next(err)
+  }
+}
+
+const updateProfile = async (req, res, next) => {
+  try {
+    const user = await authService.updateProfile(req.user.userId, req.body.name)
+    res.json({ user })
   } catch (err) {
     next(err)
   }
@@ -48,22 +57,4 @@ const logout = async (req, res, next) => {
   }
 }
 
-const forgotPassword = async (req, res, next) => {
-  try {
-    await authService.forgotPassword(req.body.email)
-    res.json({ message: 'If that email is registered, a reset link has been generated.' })
-  } catch (err) {
-    next(err)
-  }
-}
-
-const resetPassword = async (req, res, next) => {
-  try {
-    await authService.resetPassword(req.body.token, req.body.password)
-    res.json({ message: 'Password updated successfully.' })
-  } catch (err) {
-    next(err)
-  }
-}
-
-module.exports = { register, login, refresh, logout, forgotPassword, resetPassword }
+module.exports = { sendOtp, verifyOtp, updateProfile, refresh, logout }

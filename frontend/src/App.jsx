@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/layout/Navbar'
+import OnboardingRoute from './components/layout/OnboardingRoute'
 import ProtectedRoute from './components/layout/ProtectedRoute'
 
 import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
-import RegisterPage from './pages/RegisterPage'
-import ForgotPasswordPage from './pages/ForgotPasswordPage'
-import ResetPasswordPage from './pages/ResetPasswordPage'
+import VerifyOTPPage from './pages/VerifyOTPPage'
+import SetupProfilePage from './pages/SetupProfilePage'
 import HackathonDetailPage from './pages/HackathonDetailPage'
 import SubmissionFormPage from './pages/SubmissionFormPage'
 import SubmissionDetailPage from './pages/SubmissionDetailPage'
@@ -22,20 +22,21 @@ export default function App() {
           {/* Public */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/verify-otp" element={<VerifyOTPPage />} />
+
+          {/* Onboarding — authenticated but name not yet set */}
+          <Route path="/setup-profile" element={<ProtectedRoute><SetupProfilePage /></ProtectedRoute>} />
 
           {/* Hackathon — single */}
-          <Route path="/hackathon" element={<ProtectedRoute><HackathonDetailPage /></ProtectedRoute>} />
-          <Route path="/hackathon/submit" element={<ProtectedRoute roles={['PARTICIPANT']}><SubmissionFormPage /></ProtectedRoute>} />
+          <Route path="/hackathon" element={<OnboardingRoute><HackathonDetailPage /></OnboardingRoute>} />
+          <Route path="/hackathon/submit" element={<OnboardingRoute roles={['PARTICIPANT']}><SubmissionFormPage /></OnboardingRoute>} />
 
           {/* Submissions */}
-          <Route path="/submissions/:id" element={<ProtectedRoute><SubmissionDetailPage /></ProtectedRoute>} />
-          <Route path="/submissions/:id/evaluate" element={<ProtectedRoute roles={['JUDGE']}><EvaluationFormPage /></ProtectedRoute>} />
+          <Route path="/submissions/:id" element={<OnboardingRoute><SubmissionDetailPage /></OnboardingRoute>} />
+          <Route path="/submissions/:id/evaluate" element={<OnboardingRoute roles={['JUDGE']}><EvaluationFormPage /></OnboardingRoute>} />
 
           {/* Admin */}
-          <Route path="/admin/users" element={<ProtectedRoute roles={['ADMIN']}><UsersPage /></ProtectedRoute>} />
+          <Route path="/admin/users" element={<OnboardingRoute roles={['ADMIN']}><UsersPage /></OnboardingRoute>} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

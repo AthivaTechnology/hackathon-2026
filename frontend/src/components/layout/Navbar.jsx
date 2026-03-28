@@ -19,7 +19,9 @@ function UserMenu({ user, onLogout }) {
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
-  const initials = user.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+  const initials = user.name
+    ? user.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+    : user.email.slice(0, 2).toUpperCase()
 
   return (
     <div className="relative" ref={ref}>
@@ -31,7 +33,7 @@ function UserMenu({ user, onLogout }) {
           {initials}
         </div>
         <div className="text-left hidden sm:block">
-          <p className="text-sm font-medium text-white leading-tight">{user.name}</p>
+          <p className="text-sm font-medium text-white leading-tight">{user.name ?? user.email}</p>
           <p className={`text-xs font-medium leading-tight ${ROLE_STYLES[user.role]}`}>{user.role}</p>
         </div>
         <svg className={`w-3.5 h-3.5 text-gray-500 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -43,7 +45,7 @@ function UserMenu({ user, onLogout }) {
         <div className="absolute right-0 mt-2 w-52 card py-1 z-50" style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }}>
           {/* Header */}
           <div className="px-4 py-3 border-b border-hack-border">
-            <p className="text-sm font-semibold text-white">{user.name}</p>
+            <p className="text-sm font-semibold text-white">{user.name ?? user.email}</p>
             <p className="text-xs text-gray-500 truncate">{user.email}</p>
           </div>
 
@@ -104,14 +106,9 @@ export default function Navbar() {
           {user ? (
             <UserMenu user={user} onLogout={handleLogout} />
           ) : (
-            <>
-              <Link to="/login" className="text-sm text-gray-400 hover:text-white transition-colors">
-                Sign in
-              </Link>
-              <Link to="/register" className="btn-primary text-sm px-4 py-1.5">
-                Register
-              </Link>
-            </>
+            <Link to="/login" className="btn-primary text-sm px-4 py-1.5">
+              Sign in
+            </Link>
           )}
         </div>
       </div>
