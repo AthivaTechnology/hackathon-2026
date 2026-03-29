@@ -5,6 +5,7 @@ const { verifyToken, requireRole } = require('../middleware/auth')
 const validate = require('../middleware/validate')
 
 router.get('/:id', verifyToken, controller.getSubmission)
+router.post('/:id/like', verifyToken, controller.toggleLike)
 
 router.patch(
   '/:id',

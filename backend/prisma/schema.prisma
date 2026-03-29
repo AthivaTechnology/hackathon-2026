@@ -33,6 +33,7 @@ model User {
   evaluations   Evaluation[]
   comments      Comment[]
   refreshTokens RefreshToken[]
+  likes         Like[]
 }
 
 model Hackathon {
@@ -65,6 +66,7 @@ model Submission {
   user        User         @relation(fields: [userId], references: [id])
   evaluations Evaluation[]
   comments    Comment[]
+  likes       Like[]
 
   @@unique([hackathonId, userId])
 }
@@ -105,6 +107,18 @@ model RefreshToken {
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Like {
+  id           String     @id @default(cuid())
+  submissionId String
+  userId       String
+  createdAt    DateTime   @default(now())
+
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([submissionId, userId])
 }
 
 model OtpToken {

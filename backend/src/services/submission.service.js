@@ -33,18 +33,26 @@ const createSubmission = async (hackathonId, userId, data) => {
   })
 }
 
-const listSubmissions = async (hackathonId) => {
+const listSubmissions = async (hackathonId, currentUserId) => {
   const hackathon = await prisma.hackathon.findUnique({ where: { id: hackathonId } })
   if (!hackathon) throw new AppError('Hackathon not found', 404)
 
-  return prisma.submission.findMany({
+  const submissions = await prisma.submission.findMany({
     where: { hackathonId },
     orderBy: { createdAt: 'desc' },
     include: {
       user: { select: { id: true, name: true } },
-      _count: { select: { comments: true, evaluations: true } },
+      _count: { select: { comments: true, evaluations: true, likes: true } },
+      likes: currentUserId ? { where: { userId: currentUserId }, select: { userId: true } } : false,
     },
   })
+
+  return submissions.map(({ likes, _count, ...s }) => ({
+    ...s,
+    _count,
+    likeCount: _count.likes,
+    likedByMe: likes ? likes.length > 0 : false,
+  }))
 }
 
 const getSubmission = async (id, requestingUser) => {
@@ -60,6 +68,8 @@ const getSubmission = async (id, requestingUser) => {
       evaluations: {
         include: { judge: { select: { id: true, name: true } } },
       },
+      _count: { select: { likes: true } },
+      likes: { where: { userId: requestingUser.userId }, select: { userId: true } },
     },
   })
   if (!submission) throw new AppError('Submission not found', 404)
@@ -83,7 +93,13 @@ const getSubmission = async (id, requestingUser) => {
     }
   })
 
-  return { ...submission, evaluations }
+  const { likes, _count, ...rest } = submission
+  return {
+    ...rest,
+    evaluations,
+    likeCount: _count.likes,
+    likedByMe: likes.length > 0,
+  }
 }
 
 const updateSubmission = async (id, userId, data) => {
@@ -107,4 +123,21 @@ const updateSubmission = async (id, userId, data) => {
   })
 }
 
-module.exports = { createSubmission, listSubmissions, getSubmission, updateSubmission }
+const toggleLike = async (submissionId, userId) => {
+  const existing = await prisma.like.findUnique({
+    where: { submissionId_userId: { submissionId, userId } },
+  })
+
+  if (existing) {
+    await prisma.like.delete({ where: { submissionId_userId: { submissionId, userId } } })
+  } else {
+    const submission = await prisma.submission.findUnique({ where: { id: submissionId } })
+    if (!submission) throw new AppError('Submission not found', 404)
+    await prisma.like.create({ data: { submissionId, userId } })
+  }
+
+  const likeCount = await prisma.like.count({ where: { submissionId } })
+  return { likedByMe: !existing, likeCount }
+}
+
+module.exports = { createSubmission, listSubmissions, getSubmission, updateSubmission, toggleLike }

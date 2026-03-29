@@ -15,7 +15,7 @@ const createSubmission = async (req, res, next) => {
 
 const listSubmissions = async (req, res, next) => {
   try {
-    const submissions = await submissionService.listSubmissions(req.params.hackathonId)
+    const submissions = await submissionService.listSubmissions(req.params.hackathonId, req.user?.userId)
     res.json({ submissions })
   } catch (err) {
     next(err)
@@ -44,4 +44,13 @@ const updateSubmission = async (req, res, next) => {
   }
 }
 
-module.exports = { createSubmission, listSubmissions, getSubmission, updateSubmission }
+const toggleLike = async (req, res, next) => {
+  try {
+    const result = await submissionService.toggleLike(req.params.id, req.user.userId)
+    res.json(result)
+  } catch (err) {
+    next(err)
+  }
+}
+
+module.exports = { createSubmission, listSubmissions, getSubmission, updateSubmission, toggleLike }

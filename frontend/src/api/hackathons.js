@@ -8,3 +8,4 @@ export const getLeaderboard = (id) => client.get(`/hackathons/${id}/leaderboard`
 export const listSubmissions = (hackathonId) => client.get(`/hackathons/${hackathonId}/submissions`)
 export const createSubmission = (hackathonId, data) =>
   client.post(`/hackathons/${hackathonId}/submissions`, data)
+export const toggleLike = (submissionId) => client.post(`/submissions/${submissionId}/like`)
