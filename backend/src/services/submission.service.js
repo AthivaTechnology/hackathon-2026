@@ -39,7 +39,7 @@ const listSubmissions = async (hackathonId, currentUserId) => {
 
   const submissions = await prisma.submission.findMany({
     where: { hackathonId },
-    orderBy: { createdAt: 'desc' },
+    orderBy: { likes: { _count: 'desc' } },
     include: {
       user: { select: { id: true, name: true } },
       _count: { select: { comments: true, evaluations: true, likes: true } },
