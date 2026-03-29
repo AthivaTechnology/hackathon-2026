@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage'
 import VerifyOTPPage from './pages/VerifyOTPPage'
 import SetupProfilePage from './pages/SetupProfilePage'
 import HackathonDetailPage from './pages/HackathonDetailPage'
+import IdeasPage from './pages/IdeasPage'
 import SubmissionFormPage from './pages/SubmissionFormPage'
 import SubmissionDetailPage from './pages/SubmissionDetailPage'
 import EvaluationFormPage from './pages/EvaluationFormPage'
@@ -29,6 +30,7 @@ export default function App() {
 
           {/* Hackathon — single */}
           <Route path="/hackathon" element={<OnboardingRoute><HackathonDetailPage /></OnboardingRoute>} />
+          <Route path="/hackathon/ideas" element={<OnboardingRoute><IdeasPage /></OnboardingRoute>} />
           <Route path="/hackathon/submit" element={<OnboardingRoute roles={['PARTICIPANT']}><SubmissionFormPage /></OnboardingRoute>} />
 
           {/* Submissions */}

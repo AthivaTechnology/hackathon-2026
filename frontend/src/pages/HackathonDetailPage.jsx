@@ -20,7 +20,6 @@ export default function HackathonDetailPage() {
   const [loading, setLoading] = useState(true)
   const [announcing, setAnnouncing] = useState(false)
   const [error, setError] = useState('')
-  const [search, setSearch] = useState('')
 
   const load = async () => {
     try {
@@ -71,10 +70,6 @@ export default function HackathonDetailPage() {
 
   const cfg = STATUS_CONFIG[hackathon.status]
   const mySubmission = submissions.find((s) => s.userId === user?.id)
-  const filtered = submissions.filter((s) =>
-    s.title.toLowerCase().includes(search.toLowerCase()) ||
-    s.user.name.toLowerCase().includes(search.toLowerCase())
-  )
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10 space-y-6">
@@ -146,7 +141,7 @@ export default function HackathonDetailPage() {
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
                     </svg>
-                    Edit Submission
+                    Edit your submission
                   </Link>
                 </>
               )}
@@ -154,6 +149,23 @@ export default function HackathonDetailPage() {
           )}
         </div>
       </div>
+
+      {/* Ideas link */}
+      <Link
+        to="/hackathon/ideas"
+        className="card card-hover p-5 flex items-center justify-between gap-4"
+      >
+        <div className="flex items-center gap-3">
+          <span className="text-2xl">💡</span>
+          <div>
+            <p className="font-semibold text-white">View all participants' ideas</p>
+            <p className="text-xs text-gray-500 mt-0.5">{submissions.length} submitted so far</p>
+          </div>
+        </div>
+        <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </Link>
 
       {/* Prizes */}
       <div className="grid grid-cols-3 gap-4">
@@ -249,47 +261,6 @@ export default function HackathonDetailPage() {
         </div>
       )}
 
-      {/* Submissions */}
-      <div>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xs font-mono text-gray-500 uppercase tracking-widest">
-            Submissions ({submissions.length})
-          </h2>
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search…"
-            className="input-dark max-w-xs py-1.5 text-xs"
-          />
-        </div>
-
-        {filtered.length === 0 && (
-          <div className="card p-12 text-center">
-            <p className="text-3xl mb-2">💡</p>
-            <p className="text-gray-500 text-sm">No submissions yet. Be the first!</p>
-          </div>
-        )}
-
-        <div className="space-y-3">
-          {filtered.map((s) => (
-            <Link
-              key={s.id}
-              to={`/submissions/${s.id}`}
-              className="card card-hover p-5 flex items-start justify-between gap-4 block"
-            >
-              <div>
-                <h3 className="font-semibold text-white mb-0.5">{s.title}</h3>
-                <p className="text-sm text-gray-500">by {s.user.name}</p>
-              </div>
-              <div className="text-right text-xs font-mono text-gray-600 shrink-0">
-                <div>{s._count?.comments ?? 0} comments</div>
-                <div>{s._count?.evaluations ?? 0} evals</div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
     </div>
   )
 }
